@@ -12,7 +12,7 @@ This project uses Laravel with Inertia.js, Vue.js, Tailwind CSS, and Laravel Sai
 1. **Clone the repository**:
     ```sh
     git clone https://git@github.com:jvbalcita/laravel-assessment.git
-    cd larave-assessment
+    cd laravel-assessment
     ```
 
 2. **Install dependencies**:
