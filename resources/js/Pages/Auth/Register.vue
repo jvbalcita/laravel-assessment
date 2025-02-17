@@ -7,6 +7,7 @@ import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 const form = useForm({
+    prefix_name: '',
     first_name: '',
     last_name: '',
     user_name: '',
@@ -27,6 +28,23 @@ const submit = () => {
         <Head title="Register" />
 
         <form @submit.prevent="submit">
+            <div>
+                <InputLabel for="prefix_name" value="Prefix Name" />
+                <select
+                    id="prefix_name"
+                    class="mt-1 mb-4 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    v-model="form.prefix_name"
+                    required
+                >
+                    <option value="" disabled>Select one</option>
+                    <option value="Mr">Mr.</option>
+                    <option value="Ms">Ms.</option>
+                    <option value="Mrs">Mrs.</option>
+                </select>
+
+                <InputError class="mt-2" :message="form.errors.prefix_name" />
+            </div>
+
             <div>
                 <InputLabel for="first_name" value="First Name" />
 

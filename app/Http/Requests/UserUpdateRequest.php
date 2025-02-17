@@ -31,7 +31,6 @@ class UserUpdateRequest extends FormRequest
             'suffix_name' => ['nullable', 'string', 'max:255'],
             'user_name' => ['required', 'string', 'max:255', Rule::unique('users')->ignore($this->user)],
             'email' => ['required', 'email', Rule::unique('users')->ignore($this->user)],
-            'photo' => ['nullable', 'string'],
             'type' => ['required', 'string', 'max:255', new NotSelectOne()],
         ];
     }

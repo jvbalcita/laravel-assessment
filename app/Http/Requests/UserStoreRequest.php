@@ -31,7 +31,6 @@ class UserStoreRequest extends FormRequest
             'suffix_name' => ['nullable', 'string', 'max:255'],
             'user_name' => ['required', 'string', 'max:255', 'unique:'.User::class],
             'email' => ['required', 'email:rfc,dns,filter', 'string', 'max:255', 'unique:'.User::class],
-            'photo' => ['nullable', 'string'],
             'type' => ['required', 'string', 'max:255', new NotSelectOne()],
         ];
     }

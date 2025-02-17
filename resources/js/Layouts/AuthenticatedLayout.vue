@@ -1,9 +1,12 @@
 <script setup>
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline';
+import { computed } from 'vue';
 import { usePage, Link } from '@inertiajs/vue3';
 import { useNotificationStore } from '@/Stores/notificationStore.js';
+import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
+import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import BaseNotificationSimple from "@/Components/Base/BaseNotificationSimple.vue";
+import DropdownLink from "@/Components/DropdownLink.vue";
+import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 
 const notificationStore = useNotificationStore();
 
@@ -19,9 +22,10 @@ const navigation = [
 ];
 const userNavigation = [
     { name: 'Your Profile', href: route('profile.edit') },
-    { name: 'Settings', href: '#' },
     { name: 'Sign out', href: route('logout'), method: 'post', as: 'button' },
 ];
+
+const userInitial = computed(() => user.first_name.charAt(0).toUpperCase());
 
 </script>
 
@@ -42,25 +46,29 @@ const userNavigation = [
                     </div>
                     <div class="hidden md:block">
                         <div class="ml-4 flex items-center md:ml-6">
-                            <button type="button" class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
-                                <span class="absolute -inset-1.5" />
-                                <span class="sr-only">View notifications</span>
-                                <BellIcon class="size-6" aria-hidden="true" />
-                            </button>
-
                             <!-- Profile dropdown -->
                             <Menu as="div" class="relative ml-3">
                                 <div>
                                     <MenuButton class="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
                                         <span class="absolute -inset-1.5" />
                                         <span class="sr-only">Open user menu</span>
-                                        <img class="size-8 rounded-full" :src="user.imageUrl" alt="" />
+                                        <img v-if="user.avatar" class="size-8 rounded-full" :src="user.avatar" alt="" />
+                                        <div v-else class="size-8 rounded-full bg-gray-500 flex items-center justify-center text-white">
+                                            {{ userInitial }}
+                                        </div>
                                     </MenuButton>
                                 </div>
                                 <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
                                     <MenuItems class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 focus:outline-hidden">
                                         <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
-                                            <Link :href="item.href" :class="[active ? 'bg-gray-100 outline-hidden' : '', 'block px-4 py-2 text-sm text-gray-700']">{{ item.name }}</Link>
+                                            <template v-if="item.as === 'button'">
+                                                <DropdownLink :href="item.href" method="post" as="button">
+                                                    {{ item.name }}
+                                                </DropdownLink>
+                                            </template>
+                                            <template v-else>
+                                                <Link :href="item.href" :class="[active ? 'bg-gray-100 outline-hidden' : '', 'block px-4 py-2 text-sm text-gray-700']">{{ item.name }}</Link>
+                                            </template>
                                         </MenuItem>
                                     </MenuItems>
                                 </transition>
@@ -86,20 +94,21 @@ const userNavigation = [
                 <div class="border-t border-gray-700 pt-4 pb-3">
                     <div class="flex items-center px-5">
                         <div class="shrink-0">
-                            <img class="size-10 rounded-full" :src="user.imageUrl" alt="" />
+                            <img v-if="user.avatar" class="size-8 rounded-full" :src="user.avatar" alt="" />
+                            {{ userInitial }}
                         </div>
                         <div class="ml-3">
                             <div class="text-base/5 font-medium text-white">{{ user.name }}</div>
                             <div class="text-sm font-medium text-gray-400">{{ user.email }}</div>
                         </div>
-                        <button type="button" class="relative ml-auto shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
-                            <span class="absolute -inset-1.5" />
-                            <span class="sr-only">View notifications</span>
-                            <BellIcon class="size-6" aria-hidden="true" />
-                        </button>
                     </div>
                     <div class="mt-3 space-y-1 px-2">
-                        <DisclosureButton v-for="item in userNavigation" :key="item.name" as="a" :href="item.href" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">{{ item.name }}</DisclosureButton>
+                        <ResponsiveNavLink :href="route('profile.edit')">
+                            Profile
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('logout')" method="post" as="button">
+                            Log Out
+                        </ResponsiveNavLink>
                     </div>
                 </div>
             </DisclosurePanel>

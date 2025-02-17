@@ -103,7 +103,7 @@ class User extends Authenticatable
      */
     public function getAvatarAttribute(): string
     {
-        return $this->photo ? asset('storage/' . $this->photo) : 'default-avatar-url';
+        return $this->photo ? asset('storage/' . $this->photo) : '';
     }
 
     protected static function boot(): void

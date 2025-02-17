@@ -49,7 +49,6 @@ const selectedItem = ref({
         suffix_name: '',
         user_name: '',
         email: '',
-        photo: '',
         type: '',
     },
 });
@@ -66,7 +65,6 @@ const form = useForm({
     suffix_name: '',
     user_name: '',
     email: '',
-    photo: '',
     type: '',
 });
 
@@ -221,7 +219,6 @@ function resetForm() {
         suffix_name: '',
         user_name: '',
         email: '',
-        photo: '',
     };
 
     selectedType.value = null;
@@ -411,17 +408,6 @@ function checkTableLastPage(table) {
                             :has-error="form.errors.email"
                         />
                         <InputError :message="form.errors.email"/>
-                    </div>
-
-                    <div class="sm:col-span-3 mt-3">
-                        <InputLabel for="photo" value="Photo"/>
-                        <BaseFormInputText
-                            id="photo"
-                            class="mt-1 block w-full"
-                            v-model="form.photo"
-                            :has-error="form.errors.photo"
-                        />
-                        <InputError :message="form.errors.photo"/>
                     </div>
                 </div>
 
